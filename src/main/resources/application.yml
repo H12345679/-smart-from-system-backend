@@ -1,0 +1,83 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: smart-farm-system-backend
+
+  # MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3310/smart_farm?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&useAffectedRows=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
+
+  # RabbitMQ
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+
+  # Elasticsearch
+  elasticsearch:
+    uris: http://localhost:9200
+
+# MyBatis-Plus
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# JWT
+jwt:
+  secret: SmartFarmSystemSecretKey2026VeryLongSecureString
+  expiration: 86400000  # 24小时
+
+# MQTT
+mqtt:
+  broker-url: tcp://localhost:1883
+  client-id: smart-farm-server
+  subscribe-topic: /ras/farm_1/#
+  username:
+  password:
+
+# Knife4j
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 认证模块
+      paths-to-match: /auth/**
+      packages-to-scan: com.edu.smartfarm.controller.auth
+    - group: 台账模块
+      paths-to-match: /batch/**
+      packages-to-scan: com.edu.smartfarm.controller.batch
+    - group: 设备模块
+      paths-to-match: /device/**,/rule/**
+      packages-to-scan: com.edu.smartfarm.controller.device
+    - group: 监控模块
+      paths-to-match: /monitor/**,/alert/**
+      packages-to-scan: com.edu.smartfarm.controller.monitor
