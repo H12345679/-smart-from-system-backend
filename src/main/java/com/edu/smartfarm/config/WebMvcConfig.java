@@ -1,6 +1,7 @@
 package com.edu.smartfarm.config;
 
 import com.edu.smartfarm.interceptor.JwtInterceptor;
+import com.edu.smartfarm.interceptor.RoleInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final JwtInterceptor jwtInterceptor;
+    private final RoleInterceptor roleInterceptor;
 
     /**
      * 跨域配置
@@ -45,5 +47,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/v3/api-docs/**",
                         "/webjars/**"
                 );
+        // 角色权限拦截器（在JWT之后执行）
+        registry.addInterceptor(roleInterceptor)
+                .addPathPatterns("/**");
     }
 }

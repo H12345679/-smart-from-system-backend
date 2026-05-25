@@ -1,5 +1,6 @@
 package com.edu.smartfarm.controller.device;
 
+import com.edu.smartfarm.interceptor.RequireRole;
 import com.edu.smartfarm.common.Result;
 import com.edu.smartfarm.entity.AlertRule;
 import com.edu.smartfarm.service.RuleService;
@@ -34,6 +35,7 @@ public class RuleController {
 
     @Operation(summary = "创建自动化规则")
     @PostMapping("/create")
+    @RequireRole({"ADMIN"})
     public Result<?> createRule(@RequestBody CreateRuleRequest request) {
         AlertRule rule = ruleService.create(request.getRuleName(), request.getSensorDeviceId(),
                 request.getOperator(), request.getThresholdValue(), request.getDurationSeconds(),
@@ -66,6 +68,7 @@ public class RuleController {
 
     @Operation(summary = "删除规则")
     @DeleteMapping("/{id}")
+    @RequireRole({"ADMIN"})
     public Result<?> deleteRule(@PathVariable Long id) {
         ruleService.delete(id);
         return Result.success("删除成功");

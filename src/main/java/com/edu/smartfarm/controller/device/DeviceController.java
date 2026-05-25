@@ -1,5 +1,6 @@
 package com.edu.smartfarm.controller.device;
 
+import com.edu.smartfarm.interceptor.RequireRole;
 import com.edu.smartfarm.common.Result;
 import com.edu.smartfarm.entity.DeviceCommandLog;
 import com.edu.smartfarm.entity.IotDevice;
@@ -35,6 +36,7 @@ public class DeviceController {
 
     @Operation(summary = "注册新设备")
     @PostMapping("/register")
+    @RequireRole({"ADMIN"})
     public Result<?> registerDevice(@RequestBody RegisterDeviceRequest request) {
         IotDevice device = deviceService.register(request.getDeviceName(), request.getMacAddress(),
                 request.getDeviceType(), request.getParameterType(), request.getTankId());
@@ -66,6 +68,7 @@ public class DeviceController {
 
     @Operation(summary = "注销设备")
     @DeleteMapping("/{id}")
+    @RequireRole({"ADMIN"})
     public Result<?> removeDevice(@PathVariable Long id) {
         deviceService.remove(id);
         return Result.success("设备已注销");

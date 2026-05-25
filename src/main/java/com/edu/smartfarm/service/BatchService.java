@@ -8,6 +8,7 @@ import com.edu.smartfarm.mapper.*;
 import com.edu.smartfarm.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,6 +28,7 @@ public class BatchService {
     private final MortalityRecordMapper mortalityRecordMapper;
     private final MedicationRecordMapper medicationRecordMapper;
 
+    @Transactional
     public BreedingBatch createBatch(Long tankId, String speciesName, Integer initialCount,
                                      BigDecimal initialAvgWeight, String supplier, String quarantineCert, LocalDate startDate) {
         String batchId = "B-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "-" + System.currentTimeMillis() % 1000;
@@ -62,6 +64,7 @@ public class BatchService {
     }
 
     // ========== 投喂 ==========
+    @Transactional
     public void addFeed(Long batchId, BigDecimal feedWeightKg, String feedType, String remark) {
         BreedingBatch batch = batchMapper.selectById(batchId);
         if (batch == null) throw new BusinessException("批次不存在");
@@ -90,6 +93,7 @@ public class BatchService {
     }
 
     // ========== 死亡 ==========
+    @Transactional
     public void addMortality(Long batchId, Integer deathCount, String deathCause, String remark) {
         BreedingBatch batch = batchMapper.selectById(batchId);
         if (batch == null) throw new BusinessException("批次不存在");
@@ -155,6 +159,7 @@ public class BatchService {
     }
 
     // ========== 出栏 ==========
+    @Transactional
     public void harvest(Long id, BigDecimal harvestWeightKg) {
         BreedingBatch batch = batchMapper.selectById(id);
         if (batch == null) throw new BusinessException("批次不存在");
